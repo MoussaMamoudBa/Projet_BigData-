@@ -14,18 +14,41 @@ Projet académique Big Data utilisant MongoDB pour analyser des commentaires You
 
 ### 1. Démarrer MongoDB (Docker)
 
+**Linux/macOS :**
+```bash
+docker compose up -d
+```
+
+**Windows PowerShell :**
 ```powershell
 docker-compose up -d
 ```
 
+**Note :** Sur Linux/macOS, utilisez `docker compose` (avec espace). Sur Windows, vous pouvez utiliser `docker-compose` ou `docker compose`.
+
 ### 2. Importer les données CSV
 
 **Option A - Script automatique (Recommandé) :**
+
+**Linux/macOS :**
+```bash
+./import_mongodb.sh
+```
+
+**Windows PowerShell :**
 ```powershell
 .\import_mongodb.ps1
 ```
 
 **Option B - Commande manuelle :**
+
+**Linux/macOS :**
+```bash
+docker cp "yt-comments_kJQP7kiw5Fk_22182891 - ExportComments.com.csv" mongodb:/tmp/comments.csv
+docker exec mongodb mongoimport --uri "mongodb://admin:password@localhost:27017/bigdata_project?authSource=admin" --collection youtube_comments --type csv --headerline --ignoreBlanks --file /tmp/comments.csv --drop
+```
+
+**Windows PowerShell :**
 ```powershell
 docker cp "yt-comments_kJQP7kiw5Fk_22182891 - ExportComments.com.csv" mongodb:/tmp/comments.csv
 docker exec mongodb mongoimport --uri "mongodb://admin:password@localhost:27017/bigdata_project?authSource=admin" --collection youtube_comments --type csv --headerline --ignoreBlanks --file /tmp/comments.csv --drop
@@ -33,7 +56,8 @@ docker exec mongodb mongoimport --uri "mongodb://admin:password@localhost:27017/
 
 ### 3. Se connecter à MongoDB
 
-```powershell
+**Linux/macOS/Windows :**
+```bash
 docker exec -it mongodb mongosh -u admin -p password
 ```
 
@@ -49,7 +73,9 @@ db.youtube_comments.countDocuments()
 
 - **`PROJET_BIGDATA_MONGODB.md`** : Documentation complète avec toutes les commandes
 - **`COMMANDES_ESSENTIELLES.md`** : Récapitulatif des commandes principales
-- **`import_mongodb.ps1`** : Script PowerShell pour l'importation automatique
+- **`QUICK_START_LINUX.md`** : Guide de démarrage rapide pour Linux/macOS
+- **`import_mongodb.sh`** : Script Bash pour l'importation automatique (Linux/macOS)
+- **`import_mongodb.ps1`** : Script PowerShell pour l'importation automatique (Windows)
 
 ---
 
@@ -111,15 +137,37 @@ db.youtube_comments.aggregate([
 
 ## 🐳 Commandes Docker
 
+**Linux/macOS :**
+```bash
+# Démarrer MongoDB
+docker compose up -d
+
+# Arrêter MongoDB
+docker compose down
+
+# Voir les logs
+docker compose logs mongodb
+
+# Voir les conteneurs
+docker ps
+```
+
+**Windows PowerShell :**
 ```powershell
 # Démarrer MongoDB
 docker-compose up -d
+# ou
+docker compose up -d
 
 # Arrêter MongoDB
 docker-compose down
+# ou
+docker compose down
 
 # Voir les logs
 docker-compose logs mongodb
+# ou
+docker compose logs mongodb
 
 # Voir les conteneurs
 docker ps
@@ -132,9 +180,11 @@ docker ps
 ```
 Projet_BigData/
 ├── docker-compose.yml              # Configuration Docker
-├── import_mongodb.ps1              # Script d'importation
+├── import_mongodb.sh               # Script d'importation (Linux/macOS)
+├── import_mongodb.ps1              # Script d'importation (Windows)
 ├── PROJET_BIGDATA_MONGODB.md       # Documentation complète
 ├── COMMANDES_ESSENTIELLES.md       # Commandes principales
+├── QUICK_START_LINUX.md            # Guide Linux/macOS
 ├── README.md                        # Ce fichier
 └── yt-comments_*.csv               # Données source
 ```
