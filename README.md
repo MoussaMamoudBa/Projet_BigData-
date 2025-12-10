@@ -12,6 +12,8 @@ Projet académique Big Data utilisant MongoDB pour analyser des commentaires You
 
 ## 🚀 Démarrage Rapide
 
+> **💡 Vous n'avez pas Docker ?** Consultez **[`GUIDE_SANS_DOCKER.md`](GUIDE_SANS_DOCKER.md)** pour utiliser MongoDB Compass ou une installation MongoDB locale.
+
 ### 1. Démarrer MongoDB (Docker)
 
 **Linux/macOS :**
@@ -73,9 +75,12 @@ db.youtube_comments.countDocuments()
 
 - **`PROJET_BIGDATA_MONGODB.md`** : Documentation complète avec toutes les commandes
 - **`COMMANDES_ESSENTIELLES.md`** : Récapitulatif des commandes principales
-- **`QUICK_START_LINUX.md`** : Guide de démarrage rapide pour Linux/macOS
-- **`import_mongodb.sh`** : Script Bash pour l'importation automatique (Linux/macOS)
-- **`import_mongodb.ps1`** : Script PowerShell pour l'importation automatique (Windows)
+- **`GUIDE_SANS_DOCKER.md`** : Guide pour utiliser MongoDB Compass ou MongoDB local (sans Docker)
+- **`QUICK_START_LINUX.md`** : Guide de démarrage rapide pour Linux/macOS avec Docker
+- **`import_mongodb.sh`** : Script Bash pour l'importation avec Docker (Linux/macOS)
+- **`import_mongodb.ps1`** : Script PowerShell pour l'importation avec Docker (Windows)
+- **`import_mongodb_local.sh`** : Script Bash pour l'importation sans Docker (Linux/macOS)
+- **`import_mongodb_local.ps1`** : Script PowerShell pour l'importation sans Docker (Windows)
 
 ---
 
@@ -180,11 +185,14 @@ docker ps
 ```
 Projet_BigData/
 ├── docker-compose.yml              # Configuration Docker
-├── import_mongodb.sh               # Script d'importation (Linux/macOS)
-├── import_mongodb.ps1              # Script d'importation (Windows)
+├── import_mongodb.sh               # Script d'importation avec Docker (Linux/macOS)
+├── import_mongodb.ps1              # Script d'importation avec Docker (Windows)
+├── import_mongodb_local.sh         # Script d'importation sans Docker (Linux/macOS)
+├── import_mongodb_local.ps1        # Script d'importation sans Docker (Windows)
 ├── PROJET_BIGDATA_MONGODB.md       # Documentation complète
 ├── COMMANDES_ESSENTIELLES.md       # Commandes principales
-├── QUICK_START_LINUX.md            # Guide Linux/macOS
+├── GUIDE_SANS_DOCKER.md            # Guide pour MongoDB Compass/local
+├── QUICK_START_LINUX.md            # Guide Linux/macOS avec Docker
 ├── README.md                        # Ce fichier
 └── yt-comments_*.csv               # Données source
 ```
