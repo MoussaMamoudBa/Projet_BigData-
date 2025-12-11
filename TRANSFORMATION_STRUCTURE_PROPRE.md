@@ -4,9 +4,43 @@ Ce guide explique comment transformer vos données vers la structure propre et s
 
 ---
 
-## 📋 Structure Propre Recommandée
+## 📋 Structures de Documents
 
-### Modèle de Document
+### Structure Initiale (Après Import CSV)
+
+**Structure brute après importation depuis le CSV :**
+
+```json
+{
+  "_id": {
+    "$oid": "693a03fa61c3c7f7efcdbbf4"
+  },
+  "id": 4,
+  "Name": "@AmalRoy-q2h",
+  "Date": "03/12/25 07:24:13",
+  "Likes": 4,
+  "isHearted": "yes",
+  "isPinned": "no",
+  "Comment": "8,800,00000 views 😮😮",
+  "(view source)": "view comment"
+}
+```
+
+**Caractéristiques de cette structure :**
+- ⚠️ Noms de champs longs (`Name`, `Comment`, `isHearted`)
+- ⚠️ Types inappropriés : `Likes` peut être String ou Number selon l'import
+- ⚠️ Dates en format String (`Date`: "03/12/25 07:24:13")
+- ⚠️ Booléens en String (`isHearted`: "yes"/"no" au lieu de true/false)
+- ⚠️ Métadonnées dispersées (pas regroupées)
+- ⚠️ Champ avec caractères spéciaux `(view source)`
+
+**Cette structure est fonctionnelle mais pas optimale pour les requêtes et agrégations.**
+
+---
+
+### Structure Propre (Modèle Recommandé) ⭐
+
+**Structure standardisée, propre et optimale pour MongoDB :**
 
 ```json
 {
@@ -24,13 +58,27 @@ Ce guide explique comment transformer vos données vers la structure propre et s
 }
 ```
 
-### Avantages de cette Structure
+### Comparaison : Structure Initiale vs Structure Propre
+
+| Aspect | Structure Initiale | Structure Propre (Recommandée) |
+|--------|-------------------|-------------------------------|
+| **ID Commentaire** | `id` (Number) | `comment_id` (Number) |
+| **Auteur** | `Name` (String) | `author` (String) |
+| **Texte** | `Comment` (String) | `text` (String) |
+| **Date** | `Date` (String: "03/12/25 07:24:13") | `timestamp` (ISODate) |
+| **Likes** | `Likes` (Number/String) | `metadata.likes` (Number) |
+| **Hearted** | `isHearted` (String: "yes"/"no") | `metadata.hearted` (Boolean) |
+| **Pinned** | `isPinned` (String: "yes"/"no") | `metadata.pinned` (Boolean) |
+| **Source** | - | `metadata.source` (String) |
+| **Champ spécial** | `(view source)` (String) | - (supprimé) |
+
+### Avantages de la Structure Propre
 
 ✅ **Noms de champs courts et clairs**
-- `comment_id` au lieu de `id` ou `commentId`
-- `author` au lieu de `Name` ou `authorName`
+- `comment_id` au lieu de `id`
+- `author` au lieu de `Name`
 - `text` au lieu de `Comment`
-- `timestamp` au lieu de `Date` ou `publishedAt`
+- `timestamp` au lieu de `Date`
 
 ✅ **Métadonnées regroupées**
 - Toutes les métadonnées dans un objet `metadata`
@@ -39,11 +87,14 @@ Ce guide explique comment transformer vos données vers la structure propre et s
 
 ✅ **Types de données appropriés**
 - `ISODate` pour les dates (au lieu de String)
-- `Number` pour les likes (au lieu de String)
+- `Number` pour les likes (garanti)
 - `Boolean` pour hearted/pinned (au lieu de "yes"/"no")
 
 ✅ **Source documentée**
 - Le champ `metadata.source` indique l'origine des données
+
+✅ **Champs problématiques supprimés**
+- Le champ `(view source)` avec caractères spéciaux est supprimé
 
 ---
 

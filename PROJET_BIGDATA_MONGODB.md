@@ -64,21 +64,27 @@ docker exec mongodb mongoimport --uri "mongodb://admin:password@localhost:27017/
 
 ## 2️⃣ Structure des Documents
 
-### Exemple de document après importation
+### Exemple de document après importation (Structure Initiale)
+
+**Structure brute après importation depuis le CSV :**
 
 ```json
 {
-  "_id": ObjectId("..."),
-  "id": "1",
-  "Name": "@kevinricardogustanlopez-b5u",
-  "Date": "03/12/25 06:24:13",
-  "Likes": "3",
+  "_id": {
+    "$oid": "693a03fa61c3c7f7efcdbbf4"
+  },
+  "id": 4,
+  "Name": "@AmalRoy-q2h",
+  "Date": "03/12/25 07:24:13",
+  "Likes": 4,
   "isHearted": "yes",
   "isPinned": "no",
-  "Comment": "Quien en 2025?",
+  "Comment": "8,800,00000 views 😮😮",
   "(view source)": "view comment"
 }
 ```
+
+**Note :** Selon l'import, certains champs peuvent être des Strings (`Likes` peut être "4" au lieu de 4). La structure ci-dessus montre les types après conversion automatique par MongoDB.
 
 ### Structure optimisée (après transformation)
 

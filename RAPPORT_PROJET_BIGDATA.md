@@ -49,21 +49,27 @@ docker exec mongodb mongoimport \
 
 ## 2️⃣ Structure des Documents
 
-### Structure après importation
+### Structure après importation (Structure Initiale)
+
+**Structure brute après importation depuis le CSV :**
 
 ```json
 {
-  "_id": ObjectId("676f8a3b1234567890abcdef"),
-  "id": "1",
-  "Name": "@kevinricardogustanlopez-b5u",
-  "Date": "03/12/25 06:24:13",
-  "Likes": "3",
+  "_id": {
+    "$oid": "693a03fa61c3c7f7efcdbbf4"
+  },
+  "id": 4,
+  "Name": "@AmalRoy-q2h",
+  "Date": "03/12/25 07:24:13",
+  "Likes": 4,
   "isHearted": "yes",
   "isPinned": "no",
-  "Comment": "Quien en 2025?",
+  "Comment": "8,800,00000 views 😮😮",
   "(view source)": "view comment"
 }
 ```
+
+**Note :** Cette structure reflète exactement ce qui est importé depuis le CSV. Le champ `Likes` peut être un Number (comme montré) ou une String selon la configuration de l'import.
 
 ### Champs du document
 

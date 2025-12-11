@@ -62,6 +62,26 @@ Les commentaires ont été exportés en utilisant **ExportComments.com**, un ser
 - Dates récentes (décembre 2025) montrant l'activité continue sur cette vidéo classique
 - Commentaires avec différents niveaux d'engagement (likes, hearted, pinned)
 
+### Structure Initiale (Après Import)
+
+**Structure brute après importation depuis le CSV :**
+
+```json
+{
+  "_id": {
+    "$oid": "693a03fa61c3c7f7efcdbbf4"
+  },
+  "id": 4,
+  "Name": "@AmalRoy-q2h",
+  "Date": "03/12/25 07:24:13",
+  "Likes": 4,
+  "isHearted": "yes",
+  "isPinned": "no",
+  "Comment": "8,800,00000 views 😮😮",
+  "(view source)": "view comment"
+}
+```
+
 ### ⭐ Structure Propre Recommandée
 
 Pour une meilleure organisation et exploitation des données, nous recommandons d'utiliser la **structure propre standardisée** :
