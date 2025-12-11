@@ -96,6 +96,85 @@ docker exec mongodb mongoimport \
 }
 ```
 
+### Structure propre (modèle recommandé) ⭐
+
+**Structure standardisée, propre et optimale pour MongoDB :**
+
+```json
+{
+  "_id": ObjectId("693a03fa61c3c7f7efcdbbf4"),
+  "comment_id": 4,
+  "author": "@AmalRoy-q2h",
+  "text": "8,800,00000 views 😮😮",
+  "metadata": {
+    "likes": 4,
+    "hearted": true,
+    "pinned": false,
+    "source": "youtube"
+  },
+  "timestamp": ISODate("2025-12-03T07:24:13Z")
+}
+```
+
+**Avantages de cette structure :**
+- ✅ Noms de champs courts et clairs (`comment_id`, `author`, `text`)
+- ✅ Métadonnées regroupées dans un objet `metadata` (meilleure organisation)
+- ✅ Types de données appropriés (ISODate, Number, Boolean)
+- ✅ Structure standardisée et exploitable
+- ✅ Facilite les requêtes et agrégations
+- ✅ Source documentée dans les métadonnées
+
+**Tableau comparatif des structures :**
+
+| Champ Initial | Structure Optimisée | Structure Propre (Recommandée) |
+|---------------|---------------------|-------------------------------|
+| `id` | `commentId` | `comment_id` |
+| `Name` | `authorName` | `author` |
+| `Comment` | `text` | `text` |
+| `Date` | `publishedAt` | `timestamp` |
+| `Likes` | `likeCount` | `metadata.likes` |
+| `isHearted` | `isHearted` | `metadata.hearted` |
+| `isPinned` | `isPinned` | `metadata.pinned` |
+| - | - | `metadata.source` |
+
+**Commande de transformation vers structure propre :**
+
+```javascript
+db.youtube_comments.aggregate([
+  {
+    $project: {
+      comment_id: { $toInt: "$id" },
+      author: "$Name",
+      text: "$Comment",
+      metadata: {
+        likes: { $toInt: "$Likes" },
+        hearted: { $eq: ["$isHearted", "yes"] },
+        pinned: { $eq: ["$isPinned", "yes"] },
+        source: "youtube"
+      },
+      timestamp: {
+        $dateFromString: {
+          dateString: {
+            $concat: [
+              { $substr: ["$Date", 6, 2] }, "/",
+              { $substr: ["$Date", 3, 2] }, "/",
+              "20", { $substr: ["$Date", 0, 2] },
+              " ",
+              { $substr: ["$Date", 9, 8] }
+            ]
+          },
+          format: "%d/%m/%Y %H:%M:%S",
+          onError: null
+        }
+      }
+    }
+  },
+  {
+    $out: "youtube_comments_clean"
+  }
+])
+```
+
 ---
 
 ## 3️⃣ Commandes MongoDB - Analyse Complète

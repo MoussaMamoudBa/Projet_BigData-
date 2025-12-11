@@ -97,6 +97,47 @@ docker exec mongodb mongoimport --uri "mongodb://admin:password@localhost:27017/
 }
 ```
 
+### Structure propre (modèle recommandé) ⭐
+
+**Structure standardisée, propre et optimale pour MongoDB :**
+
+```json
+{
+  "_id": ObjectId("693a03fa61c3c7f7efcdbbf4"),
+  "comment_id": 4,
+  "author": "@AmalRoy-q2h",
+  "text": "8,800,00000 views 😮😮",
+  "metadata": {
+    "likes": 4,
+    "hearted": true,
+    "pinned": false,
+    "source": "youtube"
+  },
+  "timestamp": ISODate("2025-12-03T07:24:13Z")
+}
+```
+
+**Avantages de cette structure :**
+- ✅ Noms de champs courts et clairs (`comment_id`, `author`, `text`)
+- ✅ Métadonnées regroupées dans un objet `metadata` (meilleure organisation)
+- ✅ Types de données appropriés (ISODate, Number, Boolean)
+- ✅ Structure standardisée et exploitable
+- ✅ Facilite les requêtes et agrégations
+- ✅ Source documentée dans les métadonnées
+
+**Comparaison des champs :**
+
+| Structure Initiale | Structure Optimisée | Structure Propre (Recommandée) |
+|-------------------|---------------------|-------------------------------|
+| `id` | `commentId` | `comment_id` |
+| `Name` | `authorName` | `author` |
+| `Comment` | `text` | `text` |
+| `Date` | `publishedAt` | `timestamp` |
+| `Likes` | `likeCount` | `metadata.likes` |
+| `isHearted` | `isHearted` | `metadata.hearted` |
+| `isPinned` | `isPinned` | `metadata.pinned` |
+| - | - | `metadata.source` |
+
 ---
 
 ## 3️⃣ Commandes MongoDB - Analyse Complète
@@ -111,6 +152,7 @@ db.youtube_comments.find().limit(5).pretty()
 
 #### Chercher un mot-clé dans le texte
 
+**Avec structure initiale :**
 ```javascript
 // Recherche simple (insensible à la casse)
 db.youtube_comments.find({ "Comment": /2025/i }).pretty()
@@ -119,47 +161,73 @@ db.youtube_comments.find({ "Comment": /2025/i }).pretty()
 db.youtube_comments.find({ 
   "Comment": { $regex: "2025", $options: "i" } 
 }).count()
+```
+
+**Avec structure propre (recommandée) :**
+```javascript
+// Recherche dans le champ text
+db.youtube_comments_clean.find({ "text": /2025/i }).pretty()
 
 // Recherche multiple mots-clés
-db.youtube_comments.find({
+db.youtube_comments_clean.find({
   $or: [
-    { "Comment": /2025/i },
-    { "Comment": /december/i },
-    { "Comment": /décembre/i }
+    { "text": /2025/i },
+    { "text": /december/i },
+    { "text": /décembre/i }
   ]
 }).pretty()
 ```
 
 #### Filtrer par auteur
 
+**Avec structure initiale :**
 ```javascript
 // Commentaires d'un auteur spécifique
 db.youtube_comments.find({ 
   "Name": "@kevinricardogustanlopez-b5u" 
 }).pretty()
+```
+
+**Avec structure propre (recommandée) :**
+```javascript
+// Commentaires d'un auteur spécifique
+db.youtube_comments_clean.find({ 
+  "author": "@kevinricardogustanlopez-b5u" 
+}).pretty()
 
 // Recherche partielle d'auteur
-db.youtube_comments.find({ 
-  "Name": /kevin/i 
+db.youtube_comments_clean.find({ 
+  "author": /kevin/i 
 }).pretty()
 ```
 
 #### Récupérer les commentaires les plus likés
 
+**Avec structure initiale :**
 ```javascript
-// Top 10 commentaires les plus likés
-db.youtube_comments.find()
-  .sort({ "Likes": -1 })
-  .limit(10)
-  .pretty()
-
-// Avec conversion en nombre (si Likes est string)
+// Top 10 commentaires les plus likés (avec conversion)
 db.youtube_comments.aggregate([
   { $addFields: { likeCount: { $toInt: "$Likes" } } },
   { $sort: { likeCount: -1 } },
   { $limit: 10 },
   { $project: { Name: 1, Comment: 1, likeCount: 1 } }
 ])
+```
+
+**Avec structure propre (recommandée) :**
+```javascript
+// Top 10 commentaires les plus likés
+db.youtube_comments_clean.find()
+  .sort({ "metadata.likes": -1 })
+  .limit(10)
+  .pretty()
+
+// Avec projection pour afficher seulement les champs importants
+db.youtube_comments_clean.find()
+  .sort({ "metadata.likes": -1 })
+  .limit(10)
+  .project({ author: 1, text: 1, "metadata.likes": 1, timestamp: 1 })
+  .pretty()
 ```
 
 #### Commentaires avec plus de X likes
@@ -448,6 +516,98 @@ db.youtube_comments.aggregate([
     $out: "youtube_comments_clean"
   }
 ])
+```
+
+#### Transformation vers structure propre (modèle recommandé) ⭐
+
+**Convertir vers la structure standardisée et propre :**
+
+```javascript
+db.youtube_comments.aggregate([
+  {
+    $project: {
+      comment_id: { $toInt: "$id" },
+      author: "$Name",
+      text: "$Comment",
+      metadata: {
+        likes: { $toInt: "$Likes" },
+        hearted: { $eq: ["$isHearted", "yes"] },
+        pinned: { $eq: ["$isPinned", "yes"] },
+        source: "youtube"
+      },
+      timestamp: {
+        $dateFromString: {
+          dateString: {
+            $concat: [
+              { $substr: ["$Date", 6, 2] }, "/",
+              { $substr: ["$Date", 3, 2] }, "/",
+              "20", { $substr: ["$Date", 0, 2] },
+              " ",
+              { $substr: ["$Date", 9, 8] }
+            ]
+          },
+          format: "%d/%m/%Y %H:%M:%S",
+          onError: null
+        }
+      }
+    }
+  },
+  {
+    $out: "youtube_comments_clean"
+  }
+])
+```
+
+**Alternative : Mettre à jour la collection existante**
+
+```javascript
+// Créer une nouvelle collection avec la structure propre
+db.youtube_comments.aggregate([
+  {
+    $project: {
+      comment_id: { $toInt: "$id" },
+      author: "$Name",
+      text: "$Comment",
+      metadata: {
+        likes: { $toInt: "$Likes" },
+        hearted: { $eq: ["$isHearted", "yes"] },
+        pinned: { $eq: ["$isPinned", "yes"] },
+        source: "youtube"
+      },
+      timestamp: {
+        $dateFromString: {
+          dateString: {
+            $concat: [
+              { $substr: ["$Date", 6, 2] }, "/",
+              { $substr: ["$Date", 3, 2] }, "/",
+              "20", { $substr: ["$Date", 0, 2] },
+              " ",
+              { $substr: ["$Date", 9, 8] }
+            ]
+          },
+          format: "%d/%m/%Y %H:%M:%S",
+          onError: null
+        }
+      }
+    }
+  },
+  {
+    $merge: {
+      into: "youtube_comments",
+      whenMatched: "replace"
+    }
+  }
+])
+```
+
+**Vérifier la transformation :**
+
+```javascript
+// Voir un exemple de document transformé
+db.youtube_comments_clean.findOne().pretty()
+
+// Ou si vous avez utilisé $merge
+db.youtube_comments.findOne({ comment_id: { $exists: true } }).pretty()
 ```
 
 #### Ajouter un champ sentiment

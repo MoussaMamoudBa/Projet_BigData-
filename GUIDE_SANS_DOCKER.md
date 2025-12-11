@@ -4,34 +4,166 @@ Ce guide explique comment utiliser le projet avec MongoDB Compass ou une install
 
 ---
 
-## 📋 Prérequis
+## ⚠️ Important : MongoDB Compass vs MongoDB Server
 
-- ✅ MongoDB installé localement OU
-- ✅ MongoDB Compass installé
-- ✅ MongoDB Tools (`mongoimport`, `mongosh`) installés (optionnel, pour la ligne de commande)
+**MongoDB Compass** est juste une **interface graphique (GUI)** - c'est un **client** qui se connecte à un serveur MongoDB.
+
+**Vous avez besoin d'un serveur MongoDB qui tourne quelque part :**
+
+### 🎯 Vos Options (Choisissez une) :
+
+1. **✅ Utiliser Docker** (Déjà configuré dans ce projet - **RECOMMANDÉ**)
+   - Vous avez déjà Docker qui fonctionne
+   - MongoDB tourne dans un conteneur Docker
+   - Connection String : `mongodb://admin:password@localhost:27017/bigdata_project?authSource=admin`
+
+2. **☁️ MongoDB Atlas** (Cloud - Gratuit - Pas d'installation nécessaire)
+   - Créez un compte gratuit : https://www.mongodb.com/cloud/atlas/register
+   - Créez un cluster gratuit (M0)
+   - Obtenez votre connection string
+   - Connectez MongoDB Compass à Atlas
+
+3. **💻 Installer MongoDB localement** (Plus complexe)
+   - Nécessite l'installation de MongoDB Server sur votre machine
+   - Voir section "Installation MongoDB Local" ci-dessous
 
 ---
 
-## 🎯 Option 1 : Utiliser MongoDB Compass (Recommandé - Interface Graphique)
+## 📋 Prérequis selon votre choix
 
-### 1. Installer MongoDB Compass
+**Si vous utilisez Docker :**
+- ✅ Docker installé (déjà fait)
+- ✅ MongoDB Compass installé (déjà fait)
+- ✅ Lancer : `docker compose up -d`
 
-Téléchargez depuis : https://www.mongodb.com/try/download/compass
+**Si vous utilisez MongoDB Atlas :**
+- ✅ Compte MongoDB Atlas (gratuit)
+- ✅ MongoDB Compass installé (déjà fait)
 
-### 2. Se connecter à MongoDB
+**Si vous installez MongoDB localement :**
+- ✅ MongoDB Server installé localement
+- ✅ MongoDB Compass installé (déjà fait)
+- ✅ MongoDB Tools (`mongoimport`, `mongosh`) installés (optionnel)
 
-**Si MongoDB est installé localement :**
-- **Connection String** : `mongodb://localhost:27017`
+---
+
+## 🎯 Option 1 : Utiliser MongoDB Compass avec Docker (RECOMMANDÉ)
+
+**C'est la solution la plus simple puisque vous avez déjà Docker configuré !**
+
+### 1. Démarrer MongoDB avec Docker
+
+```bash
+cd /home/ahmed/Desktop/Projet_BigData-
+docker compose up -d
+```
+
+Vérifiez que MongoDB est démarré :
+```bash
+docker ps | grep mongodb
+```
+
+### 2. Se connecter avec MongoDB Compass
+
+Ouvrez MongoDB Compass et utilisez cette connection string :
+
+```
+mongodb://admin:password@localhost:27017/?authSource=admin
+```
+
+**Ou utilisez l'interface Compass :**
+- Host: `localhost`
+- Port: `27017`
+- Username: `admin`
+- Password: `password`
+- Authentication Database: `admin`
 - Cliquez sur "Connect"
 
-**Si MongoDB nécessite une authentification :**
-- **Connection String** : `mongodb://admin:password@localhost:27017/?authSource=admin`
-- Ou utilisez l'interface pour entrer :
-  - Host: `localhost`
-  - Port: `27017`
-  - Username: `admin`
-  - Password: `password`
-  - Authentication Database: `admin`
+### 3. Créer la base de données
+
+1. Dans MongoDB Compass, cliquez sur "Create Database"
+2. **Database Name** : `bigdata_project`
+3. **Collection Name** : `youtube_comments`
+4. Cliquez sur "Create Database"
+
+### 4. Importer le CSV
+
+1. Sélectionnez la collection `youtube_comments`
+2. Cliquez sur "Add Data" → "Import File"
+3. Sélectionnez le fichier : `yt-comments_kJQP7kiw5Fk_22182891 - ExportComments.com.csv`
+4. Choisissez le format : **CSV**
+5. Vérifiez que "Header row" est coché
+6. Cliquez sur "Import"
+
+---
+
+## ☁️ Option 2 : Utiliser MongoDB Atlas (Cloud - Gratuit)
+
+**Parfait si vous ne voulez pas installer MongoDB localement !**
+
+### 1. Créer un compte MongoDB Atlas
+
+1. Allez sur : https://www.mongodb.com/cloud/atlas/register
+2. Créez un compte gratuit
+3. Créez un cluster gratuit (M0 - Free tier)
+
+### 2. Obtenir votre connection string
+
+1. Dans Atlas, cliquez sur "Connect"
+2. Choisissez "Connect using MongoDB Compass"
+3. Copiez la connection string (format : `mongodb+srv://username:password@cluster.mongodb.net/`)
+
+### 3. Se connecter avec MongoDB Compass
+
+1. Ouvrez MongoDB Compass
+2. Collez votre connection string Atlas
+3. Cliquez sur "Connect"
+
+### 4. Créer la base de données et importer
+
+Suivez les mêmes étapes que l'Option 1 (créer `bigdata_project` et importer le CSV)
+
+---
+
+## 💻 Option 3 : Installer MongoDB Localement
+
+**Si vous préférez installer MongoDB directement sur votre machine :**
+
+### Installation MongoDB Server
+
+**Linux (Ubuntu/Debian/Pop OS) :**
+```bash
+# Installer MongoDB
+sudo apt-get update
+sudo apt-get install -y mongodb
+
+# Démarrer MongoDB
+sudo systemctl start mongod
+sudo systemctl enable mongod
+```
+
+**macOS (avec Homebrew) :**
+```bash
+# Installer MongoDB
+brew tap mongodb/brew
+brew install mongodb-community
+
+# Démarrer MongoDB
+brew services start mongodb-community
+```
+
+**Windows :**
+Téléchargez et installez depuis : https://www.mongodb.com/try/download/community
+MongoDB démarrera automatiquement comme service Windows.
+
+### Se connecter avec MongoDB Compass
+
+**Sans authentification (par défaut) :**
+- Connection String : `mongodb://localhost:27017`
+- Cliquez sur "Connect"
+
+**Avec authentification :**
+- Connection String : `mongodb://admin:password@localhost:27017/?authSource=admin`
 
 ### 3. Créer la base de données
 

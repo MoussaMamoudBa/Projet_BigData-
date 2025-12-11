@@ -10,6 +10,74 @@ Projet académique Big Data utilisant MongoDB pour analyser des commentaires You
 
 ---
 
+## 📹 Source des Données
+
+### Vidéo YouTube Source
+
+Les commentaires analysés proviennent de la vidéo YouTube suivante :
+
+- **Titre** : Enrique Iglesias - Bailando (Español) ft. Descemer Bueno, Gente De Zona
+- **Artiste** : Enrique Iglesias
+- **URL** : https://www.youtube.com/watch?v=NUsoVlDFqZg
+- **Vues** : 3 763 899 492+ vues (au moment de l'export)
+- **Date de publication** : 11 avril 2014
+- **Hashtags** : #EnriqueIglesias #Bailando
+
+### Export des Données
+
+Les commentaires ont été exportés en utilisant **ExportComments.com**, un service en ligne qui permet d'extraire et d'organiser les commentaires YouTube au format CSV.
+
+**Processus d'export :**
+1. Accéder à ExportComments.com
+2. Coller l'URL de la vidéo YouTube : `https://www.youtube.com/watch?v=NUsoVlDFqZg`
+3. Sélectionner les options d'export (nombre de commentaires, format, etc.)
+4. Télécharger le fichier CSV généré : `yt-comments_kJQP7kiw5Fk_22182891 - ExportComments.com.csv`
+
+**Structure du fichier CSV exporté :**
+- `id` : Identifiant unique du commentaire
+- `Name` : Nom d'utilisateur (ex: @kevinricardogustanlopez-b5u)
+- `Date` : Date et heure du commentaire (format: DD/MM/YY HH:MM:SS)
+- `Likes` : Nombre de likes
+- `isHearted` : Si le commentaire a été "liké" par le créateur (yes/no)
+- `isPinned` : Si le commentaire est épinglé (yes/no)
+- `Comment` : Texte du commentaire
+- `(view source)` : Lien vers le commentaire original
+
+**Exemple de commentaires exportés :**
+- Commentaires en espagnol, anglais et autres langues
+- Dates récentes (décembre 2025) montrant l'activité continue sur cette vidéo classique
+- Commentaires avec différents niveaux d'engagement (likes, hearted, pinned)
+
+### ⭐ Structure Propre Recommandée
+
+Pour une meilleure organisation et exploitation des données, nous recommandons d'utiliser la **structure propre standardisée** :
+
+```json
+{
+  "_id": ObjectId("693a03fa61c3c7f7efcdbbf4"),
+  "comment_id": 4,
+  "author": "@AmalRoy-q2h",
+  "text": "8,800,00000 views 😮😮",
+  "metadata": {
+    "likes": 4,
+    "hearted": true,
+    "pinned": false,
+    "source": "youtube"
+  },
+  "timestamp": ISODate("2025-12-03T07:24:13Z")
+}
+```
+
+**Avantages :**
+- ✅ Noms de champs courts et clairs
+- ✅ Métadonnées regroupées dans un objet `metadata`
+- ✅ Types de données appropriés (ISODate, Number, Boolean)
+- ✅ Structure standardisée et exploitable
+
+**Voir le guide complet :** [`TRANSFORMATION_STRUCTURE_PROPRE.md`](TRANSFORMATION_STRUCTURE_PROPRE.md)
+
+---
+
 ## 🚀 Démarrage Rapide
 
 > **💡 Vous n'avez pas Docker ?** Consultez **[`GUIDE_SANS_DOCKER.md`](GUIDE_SANS_DOCKER.md)** pour utiliser MongoDB Compass ou une installation MongoDB locale.
@@ -73,8 +141,11 @@ db.youtube_comments.countDocuments()
 
 ## 📚 Documentation
 
+- **`EVALUATION_PROJET.md`** : ✅ Évaluation complète de la conformité du projet aux exigences
 - **`PROJET_BIGDATA_MONGODB.md`** : Documentation complète avec toutes les commandes
+- **`TRANSFORMATION_STRUCTURE_PROPRE.md`** : ⭐ Guide pour transformer vers la structure propre recommandée
 - **`COMMANDES_ESSENTIELLES.md`** : Récapitulatif des commandes principales
+- **`EXPORT_COMMENTS_GUIDE.md`** : Guide complet sur l'export de commentaires YouTube avec ExportComments.com
 - **`GUIDE_SANS_DOCKER.md`** : Guide pour utiliser MongoDB Compass ou MongoDB local (sans Docker)
 - **`QUICK_START_LINUX.md`** : Guide de démarrage rapide pour Linux/macOS avec Docker
 - **`import_mongodb.sh`** : Script Bash pour l'importation avec Docker (Linux/macOS)
@@ -191,11 +262,19 @@ Projet_BigData/
 ├── import_mongodb_local.ps1        # Script d'importation sans Docker (Windows)
 ├── PROJET_BIGDATA_MONGODB.md       # Documentation complète
 ├── COMMANDES_ESSENTIELLES.md       # Commandes principales
+├── EXPORT_COMMENTS_GUIDE.md        # Guide d'export de commentaires YouTube
 ├── GUIDE_SANS_DOCKER.md            # Guide pour MongoDB Compass/local
 ├── QUICK_START_LINUX.md            # Guide Linux/macOS avec Docker
 ├── README.md                        # Ce fichier
-└── yt-comments_*.csv               # Données source
+└── yt-comments_kJQP7kiw5Fk_22182891 - ExportComments.com.csv  # Données source (100 commentaires YouTube)
 ```
+
+**Fichier de données :**
+- **Nom** : `yt-comments_kJQP7kiw5Fk_22182891 - ExportComments.com.csv`
+- **Source** : Commentaires YouTube de la vidéo "Enrique Iglesias - Bailando"
+- **Format** : CSV avec en-têtes
+- **Nombre de commentaires** : 100
+- **Exporté via** : ExportComments.com
 
 ---
 
