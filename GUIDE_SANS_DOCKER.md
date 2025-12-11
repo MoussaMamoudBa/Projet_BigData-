@@ -111,7 +111,10 @@ mongodb://admin:password@localhost:27017/?authSource=admin
 
 1. Dans Atlas, cliquez sur "Connect"
 2. Choisissez "Connect using MongoDB Compass"
-3. Copiez la connection string (format : `mongodb+srv://username:password@cluster.mongodb.net/`)
+3. Copiez la connection string fournie par Atlas
+   - **Format** : `mongodb+srv://<username>:<password>@<cluster>.mongodb.net/`
+   - **⚠️ Important** : Remplacez `<username>` et `<password>` par vos identifiants réels
+   - **⚠️ Sécurité** : Ne partagez jamais votre connection string avec des credentials réels
 
 ### 3. Se connecter avec MongoDB Compass
 

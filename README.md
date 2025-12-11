@@ -1,5 +1,19 @@
 # Projet Big Data - Analyse de Commentaires YouTube avec MongoDB
 
+## ⚠️ Sécurité
+
+**Important :** Ce projet utilise des credentials par défaut (`admin:password`) pour l'environnement de développement local avec Docker. 
+
+- ✅ **Pour le développement local** : Les credentials par défaut sont acceptables
+- ⚠️ **Pour la production** : Changez TOUJOURS les mots de passe par défaut
+- ⚠️ **MongoDB Atlas** : Ne partagez JAMAIS votre connection string avec des credentials réels dans le code
+- ✅ **Fichiers sensibles** : Les fichiers `.env` sont ignorés par Git (voir `.gitignore`)
+
+**Si vous avez accidentellement commité des secrets :**
+1. Changez immédiatement les credentials exposés
+2. Utilisez `git filter-branch` ou BFG Repo-Cleaner pour supprimer les secrets de l'historique
+3. Consultez la documentation GitHub sur la gestion des secrets exposés
+
 ## 📋 Description
 
 Projet académique Big Data utilisant MongoDB pour analyser des commentaires YouTube exportés depuis ExportComments.com. Le projet démontre les capacités de MongoDB pour le traitement et l'analyse de données non structurées.
@@ -76,6 +90,17 @@ Pour une meilleure organisation et exploitation des données, nous recommandons 
 
 **Voir le guide complet :** [`TRANSFORMATION_STRUCTURE_PROPRE.md`](TRANSFORMATION_STRUCTURE_PROPRE.md)
 
+**Créer la collection propre :**
+```bash
+# Linux/macOS
+./transform_to_clean_structure.sh
+
+# Windows PowerShell
+.\transform_to_clean_structure.ps1
+```
+
+> **⚠️ Note :** La collection `youtube_comments_clean` n'est pas dans Git. Chaque personne doit exécuter le script de transformation après avoir importé les données.
+
 ---
 
 ## 🚀 Démarrage Rapide
@@ -141,6 +166,8 @@ db.youtube_comments.countDocuments()
 
 ## 📚 Documentation
 
+- **`SETUP_COMPLET.md`** : 🚀 Guide complet de setup pour nouveaux utilisateurs (après git clone/pull)
+- **`SECURITY.md`** : 🔒 Guide de sécurité et bonnes pratiques pour les credentials
 - **`EVALUATION_PROJET.md`** : ✅ Évaluation complète de la conformité du projet aux exigences
 - **`PROJET_BIGDATA_MONGODB.md`** : Documentation complète avec toutes les commandes
 - **`TRANSFORMATION_STRUCTURE_PROPRE.md`** : ⭐ Guide pour transformer vers la structure propre recommandée
@@ -255,18 +282,22 @@ docker ps
 
 ```
 Projet_BigData/
-├── docker-compose.yml              # Configuration Docker
-├── import_mongodb.sh               # Script d'importation avec Docker (Linux/macOS)
-├── import_mongodb.ps1              # Script d'importation avec Docker (Windows)
-├── import_mongodb_local.sh         # Script d'importation sans Docker (Linux/macOS)
-├── import_mongodb_local.ps1        # Script d'importation sans Docker (Windows)
-├── PROJET_BIGDATA_MONGODB.md       # Documentation complète
-├── COMMANDES_ESSENTIELLES.md       # Commandes principales
-├── EXPORT_COMMENTS_GUIDE.md        # Guide d'export de commentaires YouTube
-├── GUIDE_SANS_DOCKER.md            # Guide pour MongoDB Compass/local
-├── QUICK_START_LINUX.md            # Guide Linux/macOS avec Docker
-├── README.md                        # Ce fichier
-└── yt-comments_kJQP7kiw5Fk_22182891 - ExportComments.com.csv  # Données source (100 commentaires YouTube)
+├── docker-compose.yml                      # Configuration Docker
+├── import_mongodb.sh                       # Script d'importation avec Docker (Linux/macOS)
+├── import_mongodb.ps1                      # Script d'importation avec Docker (Windows)
+├── import_mongodb_local.sh                 # Script d'importation sans Docker (Linux/macOS)
+├── import_mongodb_local.ps1                # Script d'importation sans Docker (Windows)
+├── transform_to_clean_structure.sh         # ⭐ Script de transformation vers structure propre (Linux/macOS)
+├── transform_to_clean_structure.ps1        # ⭐ Script de transformation vers structure propre (Windows)
+├── PROJET_BIGDATA_MONGODB.md               # Documentation complète
+├── COMMANDES_ESSENTIELLES.md               # Commandes principales
+├── TRANSFORMATION_STRUCTURE_PROPRE.md      # Guide de transformation vers structure propre
+├── EXPORT_COMMENTS_GUIDE.md                # Guide d'export de commentaires YouTube
+├── GUIDE_SANS_DOCKER.md                    # Guide pour MongoDB Compass/local
+├── QUICK_START_LINUX.md                    # Guide Linux/macOS avec Docker
+├── EVALUATION_PROJET.md                    # Évaluation de conformité du projet
+├── README.md                                # Ce fichier
+└── yt-comments_kJQP7kiw5Fk_22182891 - ExportComments.com.csv  # Données source (100 commentaires)
 ```
 
 **Fichier de données :**

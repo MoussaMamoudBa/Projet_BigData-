@@ -47,9 +47,44 @@ Ce guide explique comment transformer vos données vers la structure propre et s
 
 ---
 
+## ⚠️ Important : La Collection "Clean" n'est pas dans Git
+
+**Les collections MongoDB ne sont pas versionnées dans Git !**
+
+Quand quelqu'un fait un `git pull` de votre projet :
+- ✅ Il obtiendra les scripts et la documentation
+- ❌ Il n'aura **PAS** la collection `youtube_comments_clean` automatiquement
+- ✅ Il devra exécuter la transformation lui-même
+
+**Solution :** Utilisez les scripts automatisés fournis :
+- **Linux/macOS** : `./transform_to_clean_structure.sh`
+- **Windows** : `.\transform_to_clean_structure.ps1`
+
+Ces scripts créent automatiquement la collection `youtube_comments_clean` à partir de `youtube_comments`.
+
+---
+
 ## 🔄 Transformation Complète
 
-### Option 1 : Créer une Nouvelle Collection
+### Option 1 : Script Automatisé (Recommandé) ⭐
+
+**Linux/macOS :**
+```bash
+./transform_to_clean_structure.sh
+```
+
+**Windows PowerShell :**
+```powershell
+.\transform_to_clean_structure.ps1
+```
+
+Ces scripts :
+- ✅ Vérifient que la collection source existe
+- ✅ Transforment automatiquement vers la structure propre
+- ✅ Créent les index recommandés
+- ✅ Affichent un exemple de document transformé
+
+### Option 2 : Créer une Nouvelle Collection Manuellement
 
 **Créer une collection `youtube_comments_clean` avec la structure propre :**
 
