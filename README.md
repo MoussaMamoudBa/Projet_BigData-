@@ -1,18 +1,5 @@
 # Projet Big Data - Analyse de Commentaires YouTube avec MongoDB
 
-## ⚠️ Sécurité
-
-**Important :** Ce projet utilise des credentials par défaut (`admin:password`) pour l'environnement de développement local avec Docker. 
-
-- ✅ **Pour le développement local** : Les credentials par défaut sont acceptables
-- ⚠️ **Pour la production** : Changez TOUJOURS les mots de passe par défaut
-- ⚠️ **MongoDB Atlas** : Ne partagez JAMAIS votre connection string avec des credentials réels dans le code
-- ✅ **Fichiers sensibles** : Les fichiers `.env` sont ignorés par Git (voir `.gitignore`)
-
-**Si vous avez accidentellement commité des secrets :**
-1. Changez immédiatement les credentials exposés
-2. Utilisez `git filter-branch` ou BFG Repo-Cleaner pour supprimer les secrets de l'historique
-3. Consultez la documentation GitHub sur la gestion des secrets exposés
 
 ## 📋 Description
 
